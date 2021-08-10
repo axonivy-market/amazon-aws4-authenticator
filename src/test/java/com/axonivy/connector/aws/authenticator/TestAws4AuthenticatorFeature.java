@@ -14,13 +14,36 @@ import com.axonivy.connector.aws.authentication.Aws4AuthenticationFeature;
 class TestAws4AuthenticatorFeature {
 
   @Test
-  void authenticator() {
+  void authenticator_with_regionName() {
 
     var client = ClientBuilder.newBuilder()
         .register(Aws4AuthenticationFeature.class)
         .property("accessKey", getAccessKey())
         .property("secretKey", getSecretKey())
         .property("regionName", "eu-central-1")
+        .property("serviceName", "lex")
+        .build();
+
+    var response = client
+        .target("https://runtime-v2-lex.eu-central-1.amazonaws.com")
+        .path("/bots/{botId}/botAliases/{botAliasId}/botLocales/{localeId}/sessions/{sessionId}/text")
+        .resolveTemplate("botId", "IMRTYQC6BN")
+        .resolveTemplate("botAliasId", "GXHT5U6V6K")
+        .resolveTemplate("sessionId", "10")
+        .resolveTemplate("localeId", "en_US")
+        .request()
+        .post(Entity.entity("{\"text\":\"Book Hotel\"}", MediaType.APPLICATION_JSON));
+
+    assertThat(response.getStatusInfo()).isEqualTo(Status.OK);
+  }
+
+  @Test
+  void authenticator_without_regionName() {
+
+    var client = ClientBuilder.newBuilder()
+        .register(Aws4AuthenticationFeature.class)
+        .property("accessKey", getAccessKey())
+        .property("secretKey", getSecretKey())
         .property("serviceName", "lex")
         .build();
 
