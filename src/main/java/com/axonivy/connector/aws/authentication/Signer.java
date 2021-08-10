@@ -19,6 +19,7 @@ import org.apache.commons.codec.binary.Hex;
 
 class Signer {
 
+  private static final String HOST_SUFFIX = ".amazonaws.com";
   private static final String AWS4 = "AWS4";
   private static final String AWS4_REQUEST = "aws4_request";
   private static final String AWS_ALGORITHM = "AWS4-HMAC-SHA256";
@@ -41,7 +42,7 @@ class Signer {
   Signer(ClientRequestContext request, Providers providers) {
     this.providers = providers;
     this.request = request;
-    regionName = getStringProperty(request, "regionName");
+    regionName = getRegionName(request);
     serviceName = getStringProperty(request, "serviceName");
     accessKey = getStringProperty(request, "accessKey");
     secretKey = getStringProperty(request, "secretKey");
@@ -115,6 +116,36 @@ class Signer {
   private String getRequestHash() throws NoSuchAlgorithmException, IOException {
     var canonicalRequest = new CanonicalRequest(request, timeStamp, providers);
     return hash(canonicalRequest.generate());
+  }
+
+  private static String getRegionName(ClientRequestContext request) {
+    var configuration = request.getConfiguration();
+    var value = configuration.getProperty("regionName");
+    if (value instanceof String)
+    {
+      var str = value.toString();
+      if (str != null && !str.isBlank())
+      {
+        return str;
+      }
+    }
+    var host = request.getUri().getHost();
+    if (host == null || ! host.endsWith(HOST_SUFFIX))
+    {
+      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect host to end with "+HOST_SUFFIX);
+    }
+    host = host.substring(0, host.length() - HOST_SUFFIX.length());
+    var index = host.lastIndexOf('.');
+    if (index < 0)
+    {
+      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect to find . as delimiter before region");
+    }
+    var region = host.substring(index + 1, host.length());
+    if (region.isBlank())
+    {
+      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Region part is blank");
+    }
+    return region;
   }
 
   private static String getStringProperty(ClientRequestContext request, String name) {
