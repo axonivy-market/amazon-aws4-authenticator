@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.axonivy.connector.aws</groupId>
   <artifactId>amazon-aws4-authenticator</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <name>Amazon AWS 4 Authenticator</name>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
