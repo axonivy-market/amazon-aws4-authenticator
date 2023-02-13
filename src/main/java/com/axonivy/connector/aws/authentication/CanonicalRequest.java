@@ -48,7 +48,11 @@ class CanonicalRequest {
   }
 
   private void appendPath() {
-    builder.append(request.getUri().getPath());
+    var path = request.getUri().getPath();
+    if (path != null && path.isEmpty()) {
+      path = "/";
+    }
+    builder.append(path);
     builder.append('\n');
   }
 
@@ -63,6 +67,11 @@ class CanonicalRequest {
   private void appendCanonicalHeaders() {
     builder.append("host:");
     builder.append(request.getUri().getHost());
+    var port = request.getUri().getPort();
+    if (port != -1) {
+      builder.append(":");
+      builder.append(port);
+    }
     builder.append('\n');
     builder.append(X_AMZ_DATE);
     builder.append(':');
