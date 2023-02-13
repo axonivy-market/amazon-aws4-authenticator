@@ -37,10 +37,9 @@ class Signer {
   private final String timeStamp;
   private final String dateStamp;
   private final ClientRequestContext request;
-  private final Providers providers;
+  private final String contentHash;
 
-  Signer(ClientRequestContext request, Providers providers) {
-    this.providers = providers;
+  Signer(ClientRequestContext request, Providers providers) throws NoSuchAlgorithmException, IOException {
     this.request = request;
     regionName = getRegionName(request);
     serviceName = getStringProperty(request, "serviceName");
@@ -48,13 +47,18 @@ class Signer {
     secretKey = getStringProperty(request, "secretKey");
     timeStamp = TIME_FORMATTER.format(instant);
     dateStamp = DATE_FORMATTER.format(instant);
+    contentHash = new ContentHasher(request, providers).toHash();
+  }
+
+  public String contentHash() {
+    return contentHash;
   }
 
   String getTimeStamp() {
     return timeStamp;
   }
 
-  String sign() throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+  String sign() throws NoSuchAlgorithmException, InvalidKeyException {
     var credentialScope = getCredentialScope();
     var toSign = getStringToSign(credentialScope);
     var signatureKey = getSignatureKey();
@@ -74,7 +78,7 @@ class Signer {
             .toString();
   }
 
-  private String getStringToSign(String credential) throws NoSuchAlgorithmException, IOException {
+  private String getStringToSign(String credential) throws NoSuchAlgorithmException {
     return new StringBuilder()
             .append(AWS_ALGORITHM)
             .append('\n')
@@ -112,8 +116,8 @@ class Signer {
             .toString();
   }
 
-  private String getRequestHash() throws NoSuchAlgorithmException, IOException {
-    var canonicalRequest = new CanonicalRequest(request, timeStamp, providers);
+  private String getRequestHash() throws NoSuchAlgorithmException {
+    var canonicalRequest = new CanonicalRequest(request, timeStamp, contentHash);
     return hash(canonicalRequest.generate());
   }
 

@@ -1,5 +1,6 @@
 package com.axonivy.connector.aws.authentication;
 
+import static com.axonivy.connector.aws.authentication.Constants.X_AMZ_CONTENT;
 import static com.axonivy.connector.aws.authentication.Constants.X_AMZ_DATE;
 
 import java.io.IOException;
@@ -27,8 +28,10 @@ public class Aws4AuthenticationRequestFilter implements ClientRequestFilter {
   public void filter(ClientRequestContext context) throws IOException {
     try {
       var signer = new Signer(context, providers);
-      context.getHeaders().add(X_AMZ_DATE, signer.getTimeStamp());
-      context.getHeaders().add(AUTHORIZATION, signer.sign());
+      var headers = context.getHeaders();
+      headers.add(X_AMZ_CONTENT, signer.contentHash());
+      headers.add(X_AMZ_DATE, signer.getTimeStamp());
+      headers.add(AUTHORIZATION, signer.sign());
     } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
       throw new IOException("Could not sign Amazon AWS request", ex);
     }
