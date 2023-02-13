@@ -22,3 +22,8 @@ var client = ClientBuilder.newClient()
   .property("regionName", "us-east-1")
   .property("serviceName", "s3");
 ```
+
+## Restrictions
+
+It is only possible to send `byte[]` or `json` as payload.
+class [ContentHasher](src/main/java/com/axonivy/connector/aws/authentication/ContentHasher.java)
