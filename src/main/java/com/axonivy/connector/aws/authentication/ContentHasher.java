@@ -12,7 +12,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Providers;
 
-public class ContentHasher {
+class ContentHasher {
 
   private static final byte[] EMPTY = new byte[0];
   private static final Annotation[] ANNOTATIONS = new Annotation[] {};
@@ -20,12 +20,12 @@ public class ContentHasher {
   private final ClientRequestContext request;
   private final Providers providers;
 
-  public ContentHasher(ClientRequestContext request, Providers providers) {
+  ContentHasher(ClientRequestContext request, Providers providers) {
     this.request = request;
     this.providers = providers;
   }
 
-  public String toHash() throws NoSuchAlgorithmException, IOException {
+  String toHash() throws NoSuchAlgorithmException, IOException {
     var entity = getEntity();
     var entityHash = Crypto.hash(entity);
     return entityHash;
