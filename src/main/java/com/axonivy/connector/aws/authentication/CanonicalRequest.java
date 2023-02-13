@@ -49,7 +49,7 @@ class CanonicalRequest {
 
   private void appendPath() {
     var path = request.getUri().getPath();
-    if (path != null && path.isEmpty()) {
+    if (path == null || path.isEmpty()) {
       path = "/";
     }
     builder.append(path);
