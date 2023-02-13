@@ -2,37 +2,23 @@ package com.axonivy.connector.aws.authentication;
 
 import static com.axonivy.connector.aws.authentication.Constants.SIGNED_HEADERS;
 import static com.axonivy.connector.aws.authentication.Constants.X_AMZ_DATE;
-import static com.axonivy.connector.aws.authentication.Crypto.hash;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.security.NoSuchAlgorithmException;
 
 import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Providers;
 
 class CanonicalRequest {
-
-  private static final byte[] EMPTY = new byte[0];
-  private static final Annotation[] ANNOTATIONS = new Annotation[] {};
 
   private final ClientRequestContext request;
   private final String timeStamp;
   private final StringBuilder builder = new StringBuilder();
-  private final Providers providers;
+  private final String contentHash;
 
-  CanonicalRequest(ClientRequestContext request, String timeStamp, Providers providers) {
+  CanonicalRequest(ClientRequestContext request, String timeStamp, String contentHash) {
     this.request = request;
     this.timeStamp = timeStamp;
-    this.providers = providers;
+    this.contentHash = contentHash;
   }
 
-  String generate() throws NoSuchAlgorithmException, IOException {
+  String generate() {
     appendMethod();
     appendPath();
     appendQuery();
@@ -85,30 +71,7 @@ class CanonicalRequest {
     builder.append('\n');
   }
 
-  private void appendEntityHash() throws NoSuchAlgorithmException, IOException {
-    var entity = getEntity();
-    var entityHash = hash(entity);
-    builder.append(entityHash);
-  }
-
-  private byte[] getEntity() throws IOException {
-    if (!request.hasEntity()) {
-      return EMPTY;
-    }
-    var entity = request.getEntity();
-    try (var baos = new ByteArrayOutputStream()) {
-      var type = request.getEntityType();
-      GenericType<?> genericType = new GenericType<>(type);
-      @SuppressWarnings("unchecked")
-      var messageBodyWriter = (MessageBodyWriter<Object>) providers.getMessageBodyWriter(
-              genericType.getRawType(), genericType.getType(), ANNOTATIONS, MediaType.APPLICATION_JSON_TYPE);
-
-      messageBodyWriter.writeTo(entity,
-              genericType.getRawType(), genericType.getType(),
-              ANNOTATIONS, MediaType.APPLICATION_JSON_TYPE,
-              new MultivaluedHashMap<>(),
-              baos);
-      return baos.toByteArray();
-    }
+  private void appendEntityHash() {
+    builder.append(contentHash);
   }
 }
