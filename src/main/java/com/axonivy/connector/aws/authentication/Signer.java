@@ -63,28 +63,27 @@ class Signer {
   }
 
   private String getCredentialScope() {
-    var builder = new StringBuilder();
-    builder.append(dateStamp);
-    builder.append('/');
-    builder.append(regionName);
-    builder.append('/');
-    builder.append(serviceName);
-    builder.append('/');
-    builder.append(AWS4_REQUEST);
-    return builder.toString();
+    return new StringBuilder()
+            .append(dateStamp)
+            .append('/')
+            .append(regionName)
+            .append('/')
+            .append(serviceName)
+            .append('/')
+            .append(AWS4_REQUEST)
+            .toString();
   }
 
   private String getStringToSign(String credential) throws NoSuchAlgorithmException, IOException {
-    var builder = new StringBuilder();
-    builder.append(AWS_ALGORITHM);
-    builder.append('\n');
-    builder.append(timeStamp);
-    builder.append('\n');
-    builder.append(credential);
-    builder.append('\n');
-    var requestHash = getRequestHash();
-    builder.append(requestHash);
-    return builder.toString();
+    return new StringBuilder()
+            .append(AWS_ALGORITHM)
+            .append('\n')
+            .append(timeStamp)
+            .append('\n')
+            .append(credential)
+            .append('\n')
+            .append(getRequestHash())
+            .toString();
   }
 
   private byte[] getSignatureKey() throws InvalidKeyException, NoSuchAlgorithmException {
@@ -97,20 +96,20 @@ class Signer {
   }
 
   private String authorization(String credentialScope, byte[] signature) {
-    var builder = new StringBuilder();
-    builder.append(AWS_ALGORITHM);
-    builder.append(" ");
-    builder.append("Credential=");
-    builder.append(accessKey);
-    builder.append('/');
-    builder.append(credentialScope);
-    builder.append(", ");
-    builder.append("SignedHeaders=");
-    builder.append(SIGNED_HEADERS);
-    builder.append(", ");
-    builder.append("Signature=");
-    builder.append(Hex.encodeHexString(signature));
-    return builder.toString();
+    return new StringBuilder()
+            .append(AWS_ALGORITHM)
+            .append(" ")
+            .append("Credential=")
+            .append(accessKey)
+            .append('/')
+            .append(credentialScope)
+            .append(", ")
+            .append("SignedHeaders=")
+            .append(SIGNED_HEADERS)
+            .append(", ")
+            .append("Signature=")
+            .append(Hex.encodeHexString(signature))
+            .toString();
   }
 
   private String getRequestHash() throws NoSuchAlgorithmException, IOException {
@@ -121,28 +120,23 @@ class Signer {
   private static String getRegionName(ClientRequestContext request) {
     var configuration = request.getConfiguration();
     var value = configuration.getProperty("regionName");
-    if (value instanceof String)
-    {
+    if (value instanceof String) {
       var str = value.toString();
-      if (str != null && !str.isBlank())
-      {
+      if (str != null && !str.isBlank()) {
         return str;
       }
     }
     var host = request.getUri().getHost();
-    if (host == null || ! host.endsWith(HOST_SUFFIX))
-    {
-      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect host to end with "+HOST_SUFFIX);
+    if (host == null || !host.endsWith(HOST_SUFFIX)) {
+      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect host to end with " + HOST_SUFFIX);
     }
     host = host.substring(0, host.length() - HOST_SUFFIX.length());
     var index = host.lastIndexOf('.');
-    if (index < 0)
-    {
+    if (index < 0) {
       throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect to find . as delimiter before region");
     }
     var region = host.substring(index + 1, host.length());
-    if (region.isBlank())
-    {
+    if (region.isBlank()) {
       throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Region part is blank");
     }
     return region;
@@ -152,8 +146,7 @@ class Signer {
     var configuration = request.getConfiguration();
     var value = configuration.getProperty(name);
     if (!(value instanceof String)) {
-      throw new IllegalArgumentException("No value configured for property " + name
-              + ". Available properties are " + configuration.getPropertyNames());
+      throw new IllegalArgumentException("No value configured for property " + name + ". Available properties are " + configuration.getPropertyNames());
     }
     var str = value.toString();
     if (str == null || str.isBlank()) {
