@@ -25,5 +25,4 @@ var client = ClientBuilder.newClient()
 
 ## Restrictions
 
-It is only possible to send `byte[]` or `json` as payload.
-class [ContentHasher](src/main/java/com/axonivy/connector/aws/authentication/ContentHasher.java)
+It is only possible to send `byte[]` or `json` as payload (see [ContentHasher](src/main/java/com/axonivy/connector/aws/authentication/ContentHasher.java)).
