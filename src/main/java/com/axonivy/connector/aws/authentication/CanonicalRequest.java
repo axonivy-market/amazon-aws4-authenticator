@@ -54,7 +54,7 @@ class CanonicalRequest {
 
   private void appendQuery() {
     var query = request.getUri().getQuery();
-    if (query != null && ! query.isBlank()) {
+    if (query != null && !query.isBlank()) {
       builder.append(query);
     }
     builder.append('\n');

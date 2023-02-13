@@ -16,8 +16,7 @@ class Crypto {
   private static final String SIGN_ALGORITHM = "HmacSHA256";
   private static final String HASH_ALGORITHM = "SHA-256";
 
-  private Crypto() {
-  }
+  private Crypto() {}
 
   static String hash(String payload) throws NoSuchAlgorithmException {
     return hash(payload.getBytes(UTF8));
@@ -35,5 +34,4 @@ class Crypto {
     mac.init(keySpec);
     return mac.doFinal(data.getBytes(UTF8));
   }
-
 }
