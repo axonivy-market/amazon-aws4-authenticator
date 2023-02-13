@@ -8,7 +8,7 @@ This is a zero-dependency Java library to sign Jersey requests with a AWS4 signa
 <dependency>
   <groupId>com.axonivy.connector.aws</groupId>
   <artifactId>amazon-aws4-authenticator</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.4</version>
 </dependency>
 ```
 
@@ -16,7 +16,7 @@ This is a zero-dependency Java library to sign Jersey requests with a AWS4 signa
 
 ```java
 var client = ClientBuilder.newClient()
-  .register(new Aws4AuthenticationFeature())
+  .register(new Aws4AuthenticationFeature())  
   .property("accessKey", "YOUR-ACCESS-KEY")
   .property("secretKey", "YOUR-SECRET-KEY")
   .property("regionName", "us-east-1")
