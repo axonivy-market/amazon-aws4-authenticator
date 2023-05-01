@@ -35,12 +35,12 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.20.2</version>
+      <version>3.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-client</artifactId>      
+      <artifactId>jersey-client</artifactId>
       <version>2.34</version>
       <scope>test</scope>
     </dependency>
@@ -67,7 +67,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
+          <version>3.11.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -75,9 +75,9 @@
           <version>3.1.0</version>
         </plugin>
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.22.1</version>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -86,7 +86,7 @@
           <configuration>
             <tagNameFormat>v@{project.version}</tagNameFormat>
           </configuration>
-        </plugin>        
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
