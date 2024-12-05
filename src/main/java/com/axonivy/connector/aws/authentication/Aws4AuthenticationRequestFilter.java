@@ -33,7 +33,7 @@ public class Aws4AuthenticationRequestFilter implements ClientRequestFilter {
       headers.add(X_AMZ_DATE, signer.getTimeStamp());
       headers.add(AUTHORIZATION, signer.sign());
     } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
-      throw new IOException("Could not sign Amazon AWS request", ex);
+      throw new IOException("Could not sign request", ex);
     }
   }
 }

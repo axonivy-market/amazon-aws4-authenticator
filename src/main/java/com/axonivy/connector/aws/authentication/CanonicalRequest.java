@@ -3,6 +3,9 @@ package com.axonivy.connector.aws.authentication;
 import static com.axonivy.connector.aws.authentication.Constants.SIGNED_HEADERS;
 import static com.axonivy.connector.aws.authentication.Constants.X_AMZ_DATE;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.ws.rs.client.ClientRequestContext;
 
 class CanonicalRequest {
@@ -38,8 +41,14 @@ class CanonicalRequest {
     if (path == null || path.isEmpty()) {
       path = "/";
     }
-    builder.append(path);
-    builder.append('\n');
+
+    try {
+      var encodedPath = new URI(null, null, path, null).toASCIIString();
+      builder.append(encodedPath);
+      builder.append('\n');
+    } catch (URISyntaxException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   private void appendQuery() {

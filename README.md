@@ -16,7 +16,7 @@ This is a zero-dependency Java library to sign Jersey requests with a AWS4 signa
   <dependency>
     <groupId>com.axonivy.connector.aws</groupId>
     <artifactId>amazon-aws4-authenticator</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
   </dependency>
 </dependencies>
 ```
