@@ -3,8 +3,9 @@ package com.axonivy.connector.aws.authentication;
 import static com.axonivy.connector.aws.authentication.Constants.SIGNED_HEADERS;
 import static com.axonivy.connector.aws.authentication.Constants.X_AMZ_DATE;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import javax.ws.rs.client.ClientRequestContext;
 
@@ -41,13 +42,16 @@ class CanonicalRequest {
     if (path == null || path.isEmpty()) {
       path = "/";
     }
-
     try {
-      var encodedPath = new URI(null, null, path, null).toASCIIString();
+      var encodedPath = URLEncoder.encode(path, StandardCharsets.UTF_8.toString())
+              .replace("%2F", "/")
+              .replace("%7E", "~")
+              .replace("*", "%2A")
+              .replace("+", "%20");
       builder.append(encodedPath);
       builder.append('\n');
-    } catch (URISyntaxException ex) {
-      throw new RuntimeException(ex);
+    } catch (UnsupportedEncodingException ex) {
+      throw new RuntimeException("Unable to encode path " + path, ex);
     }
   }
 
