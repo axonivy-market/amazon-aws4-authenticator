@@ -8,6 +8,6 @@ on:
 
 jobs:
   build:
-    uses: axonivy-market/github-workflows/.github/workflows/dev.yml@v4
+    uses: axonivy-market/github-workflows/.github/workflows/dev.yml@v6
     secrets:
       mvnArgs: -Daws.access.key=${{ secrets.AWS_ACCESS_KEY }} -Daws.secret.key=${{ secrets.AWS_SECRET_KEY }}
