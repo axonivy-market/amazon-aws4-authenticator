@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.axonivy.connector.aws</groupId>
   <artifactId>amazon-aws4-authenticator</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.0.8</version>
   <name>Amazon AWS 4 Authenticator</name>
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
@@ -59,7 +59,7 @@
   </dependencies>
   <scm>
     <developerConnection>scm:git:https://github.com/axonivy-market/amazon-aws4-authenticator.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.0.8</tag>
   </scm>
   <distributionManagement>
     <repository>
