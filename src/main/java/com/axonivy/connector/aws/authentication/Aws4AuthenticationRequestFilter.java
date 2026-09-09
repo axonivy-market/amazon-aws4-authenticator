@@ -7,13 +7,14 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.ext.Providers;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestFilter;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.ext.Providers;
 
 /**
  * Request filter that signs requests to call Amazon AWS REST API.
+ * 
  * @author rwei
  * @since 06.08.2021
  */

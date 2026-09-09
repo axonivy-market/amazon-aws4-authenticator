@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.security.NoSuchAlgorithmException;
 
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Providers;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.ext.MessageBodyWriter;
+import jakarta.ws.rs.ext.Providers;
 
 class ContentHasher {
 
@@ -49,13 +49,13 @@ class ContentHasher {
       GenericType<?> genericType = new GenericType<>(type);
       @SuppressWarnings("unchecked")
       var messageBodyWriter = (MessageBodyWriter<Object>) providers.getMessageBodyWriter(
-              genericType.getRawType(), genericType.getType(), ANNOTATIONS, MediaType.APPLICATION_JSON_TYPE);
+          genericType.getRawType(), genericType.getType(), ANNOTATIONS, MediaType.APPLICATION_JSON_TYPE);
 
       messageBodyWriter.writeTo(entity,
-              genericType.getRawType(), genericType.getType(),
-              ANNOTATIONS, MediaType.APPLICATION_JSON_TYPE,
-              new MultivaluedHashMap<>(),
-              baos);
+          genericType.getRawType(), genericType.getType(),
+          ANNOTATIONS, MediaType.APPLICATION_JSON_TYPE,
+          new MultivaluedHashMap<>(),
+          baos);
       return baos.toByteArray();
     }
   }

@@ -12,10 +12,10 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.ext.Providers;
-
 import org.apache.commons.codec.binary.Hex;
+
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.ext.Providers;
 
 class Signer {
 
@@ -25,9 +25,9 @@ class Signer {
   private static final String AWS_ALGORITHM = "AWS4-HMAC-SHA256";
 
   private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
-          .withZone(ZoneId.of("UTC"));
+      .withZone(ZoneId.of("UTC"));
   private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd")
-          .withZone(ZoneId.of("UTC"));
+      .withZone(ZoneId.of("UTC"));
 
   private final String regionName;
   private final String serviceName;
@@ -68,26 +68,26 @@ class Signer {
 
   private String getCredentialScope() {
     return new StringBuilder()
-            .append(dateStamp)
-            .append('/')
-            .append(regionName)
-            .append('/')
-            .append(serviceName)
-            .append('/')
-            .append(AWS4_REQUEST)
-            .toString();
+        .append(dateStamp)
+        .append('/')
+        .append(regionName)
+        .append('/')
+        .append(serviceName)
+        .append('/')
+        .append(AWS4_REQUEST)
+        .toString();
   }
 
   private String getStringToSign(String credential) throws NoSuchAlgorithmException {
     return new StringBuilder()
-            .append(AWS_ALGORITHM)
-            .append('\n')
-            .append(timeStamp)
-            .append('\n')
-            .append(credential)
-            .append('\n')
-            .append(getRequestHash())
-            .toString();
+        .append(AWS_ALGORITHM)
+        .append('\n')
+        .append(timeStamp)
+        .append('\n')
+        .append(credential)
+        .append('\n')
+        .append(getRequestHash())
+        .toString();
   }
 
   private byte[] getSignatureKey() throws InvalidKeyException, NoSuchAlgorithmException {
@@ -101,19 +101,19 @@ class Signer {
 
   private String authorization(String credentialScope, byte[] signature) {
     return new StringBuilder()
-            .append(AWS_ALGORITHM)
-            .append(" ")
-            .append("Credential=")
-            .append(accessKey)
-            .append('/')
-            .append(credentialScope)
-            .append(", ")
-            .append("SignedHeaders=")
-            .append(SIGNED_HEADERS)
-            .append(", ")
-            .append("Signature=")
-            .append(Hex.encodeHexString(signature))
-            .toString();
+        .append(AWS_ALGORITHM)
+        .append(" ")
+        .append("Credential=")
+        .append(accessKey)
+        .append('/')
+        .append(credentialScope)
+        .append(", ")
+        .append("SignedHeaders=")
+        .append(SIGNED_HEADERS)
+        .append(", ")
+        .append("Signature=")
+        .append(Hex.encodeHexString(signature))
+        .toString();
   }
 
   private String getRequestHash() throws NoSuchAlgorithmException {
@@ -132,16 +132,19 @@ class Signer {
     }
     var host = request.getUri().getHost();
     if (host == null || !host.endsWith(HOST_SUFFIX)) {
-      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect host to end with " + HOST_SUFFIX);
+      throw new IllegalArgumentException(
+          "Cannot parse region name from url " + request.getUri() + ". Expect host to end with " + HOST_SUFFIX);
     }
     host = host.substring(0, host.length() - HOST_SUFFIX.length());
     var index = host.lastIndexOf('.');
     if (index < 0) {
-      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Expect to find . as delimiter before region");
+      throw new IllegalArgumentException(
+          "Cannot parse region name from url " + request.getUri() + ". Expect to find . as delimiter before region");
     }
     var region = host.substring(index + 1, host.length());
     if (region.isBlank()) {
-      throw new IllegalArgumentException("Cannot parse region name from url " + request.getUri() + ". Region part is blank");
+      throw new IllegalArgumentException(
+          "Cannot parse region name from url " + request.getUri() + ". Region part is blank");
     }
     return region;
   }
@@ -150,7 +153,8 @@ class Signer {
     var configuration = request.getConfiguration();
     var value = configuration.getProperty(name);
     if (!(value instanceof String)) {
-      throw new IllegalArgumentException("No value configured for property " + name + ". Available properties are " + configuration.getPropertyNames());
+      throw new IllegalArgumentException("No value configured for property " + name + ". Available properties are "
+          + configuration.getPropertyNames());
     }
     var str = value.toString();
     if (str == null || str.isBlank()) {
