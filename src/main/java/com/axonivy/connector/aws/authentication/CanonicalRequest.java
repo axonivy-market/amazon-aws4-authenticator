@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import javax.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestContext;
 
 class CanonicalRequest {
 
@@ -44,10 +44,10 @@ class CanonicalRequest {
     }
     try {
       var encodedPath = URLEncoder.encode(path, StandardCharsets.UTF_8.toString())
-              .replace("%2F", "/")
-              .replace("%7E", "~")
-              .replace("*", "%2A")
-              .replace("+", "%20");
+          .replace("%2F", "/")
+          .replace("%7E", "~")
+          .replace("*", "%2A")
+          .replace("+", "%20");
       builder.append(encodedPath);
       builder.append('\n');
     } catch (UnsupportedEncodingException ex) {

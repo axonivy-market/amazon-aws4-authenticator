@@ -2,14 +2,14 @@ package com.axonivy.connector.aws.authenticator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
-
 import org.junit.jupiter.api.Test;
 
 import com.axonivy.connector.aws.authentication.Aws4AuthenticationFeature;
+
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response.Status;
 
 class TestAws4AuthenticatorFeature {
 
