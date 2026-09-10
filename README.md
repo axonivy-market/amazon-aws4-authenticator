@@ -1,5 +1,7 @@
 # Amazon AWS4 Authenticator
 
+[![CI Build](https://github.com/axonivy-market/amazon-aws4-authenticator/actions/workflows/ci.yml/badge.svg)](https://github.com/axonivy-market/amazon-aws4-authenticator/actions/workflows/ci.yml)
+
 This is a zero-dependency Java library to sign Jersey requests with a AWS4 signature.
 
 ## Maven
@@ -16,7 +18,7 @@ This is a zero-dependency Java library to sign Jersey requests with a AWS4 signa
   <dependency>
     <groupId>com.axonivy.connector.aws</groupId>
     <artifactId>amazon-aws4-authenticator</artifactId>
-    <version>0.0.6</version>
+    <version>1.0.0</version>
   </dependency>
 </dependencies>
 ```
