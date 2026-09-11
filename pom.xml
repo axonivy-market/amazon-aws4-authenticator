@@ -50,6 +50,12 @@
       <version>4.0.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mock-server</groupId>
+      <artifactId>mockserver-netty-no-dependencies</artifactId>
+      <version>7.6.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <scm>
     <developerConnection>scm:git:https://github.com/axonivy-market/amazon-aws4-authenticator.git</developerConnection>
@@ -95,4 +101,22 @@
       </plugins>
     </pluginManagement>
   </build>
+  <profiles>
+    <profile>
+      <id>e2e</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/*E2E.java</include>
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
